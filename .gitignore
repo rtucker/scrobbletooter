@@ -1,3 +1,7 @@
+# keys and such
+app_credentials.cfg
+config.cfg
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
