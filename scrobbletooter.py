@@ -4,7 +4,7 @@ import getpass
 
 CONFIG_FILE = None
 MAX_COUNT = 1
-DEBUG = True
+DEBUG = False
 
 
 def read_app_credentials(filename="app_credentials.cfg"):
@@ -139,7 +139,8 @@ def main():
         t = p.track
 
         t_url = t.get_url()
-        t_artist_name = t.get_artist().get_name()
+        t_artist = t.get_artist()
+        t_artist_name = t_artist.get_name() if t_artist is not None else "?"
         t_track_name = t.get_title()
 
         msg = "#nowplaying in Rey's Den\n\n%s - \"%s\"\n\n#np %s" % (t_artist_name, t_track_name, t_url)
