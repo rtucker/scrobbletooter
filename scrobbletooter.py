@@ -189,9 +189,9 @@ def main():
         t_artist_name = t_artist.get_name() if t_artist is not None else "?"
         t_track_name = t.get_title()
 
-        msg = "#NowPlaying in the #CatgirlFortress\n\n%s - \"%s\"\n\n#bot #np %s" % (t_artist_name, t_track_name, t_url)
+        msg = "#NowPlaying in the #CatgirlFortress\n\n%s - \"%s\"\n\n#bot #np #timelinemute %s" % (t_artist_name, t_track_name, t_url)
 
-        masto.status_post(msg, visibility = 'unlisted')
+        masto.status_post(msg, visibility = 'public')
         countdown -= 1
         if countdown <= 0:
             break
