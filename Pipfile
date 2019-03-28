@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+certifi = "==2017.11.5"
+chardet = "==3.0.4"
+decorator = "==4.3.0"
+idna = "==2.6"
+pkg-resources = "==0.0.0"
+pylast = "==2.0.0"
+python-dateutil = "==2.6.1"
+pytz = "==2017.3"
+requests = "==2.18.4"
+six = "==1.11.0"
+"urllib3" = "==1.22"
+"Mastodon.py" = "==1.2.2"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"
