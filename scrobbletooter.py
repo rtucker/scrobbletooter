@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-import ConfigParser
+import configparser
 import datetime
 import dateutil
 import getpass
@@ -10,7 +10,7 @@ DEBUG = False
 
 
 def read_app_credentials(filename="app_credentials.cfg"):
-    creds = ConfigParser.RawConfigParser()
+    creds = configparser.RawConfigParser()
     creds.read(filename)
     return creds
 
@@ -20,7 +20,7 @@ def read_config_file(filename=None):
        object."""
     global CONFIG_FILE
 
-    config = ConfigParser.RawConfigParser()
+    config = configparser.RawConfigParser()
 
     if filename is None:
         filename = CONFIG_FILE
@@ -63,8 +63,8 @@ def get_mastodon(credentials, config):
                     client_id=credentials.get('mastodon', 'client_key'),
                     client_secret=credentials.get('mastodon', 'client_secret'),
                     api_base_url=credentials.get('mastodon', 'instance'))
-        print("Logging into %s..." % credentials.get('mastodon', 'instance'))
-        username = raw_input('E-mail address: ')
+        print(("Logging into %s..." % credentials.get('mastodon', 'instance')))
+        username = input('E-mail address: ')
         password = getpass.getpass('Password: ')
         access_token = mastodon.log_in(username, password)
         config.set('mastodon', 'access_token', access_token)
@@ -175,11 +175,11 @@ def main():
     for p in reversed(lfmu.get_recent_tracks(time_from=last_ts, cacheable=False)):
         p_ts = int(p.timestamp)
 
-        if DEBUG: print(p_ts, last_ts)
+        if DEBUG: print((p_ts, last_ts))
         if p_ts <= last_ts:
             continue
 
-        if DEBUG: print p
+        if DEBUG: print(p)
 
         last_ts = p_ts
         t = p.track
