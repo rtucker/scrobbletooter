@@ -189,7 +189,12 @@ def main():
         t_artist_name = t_artist.get_name() if t_artist is not None else "?"
         t_track_name = t.get_title()
 
-        msg = "#NowPlaying in the #CatgirlFortress\n\n%s - \"%s\"\n\n#bot #np #fediplay #timelinemute %s" % (t_artist_name, t_track_name, t_url)
+        msg = "#NowPlaying in the #CatgirlFortress\n"
+        msg += "\n"
+        msg += "%s - \"%s\"\n" % (t_artist_name, t_track_name)
+        msg += "\n"
+        msg += "Song info: %s\n" % (t_url)
+        msg += "#bot #np #fediplay #timelinemute"
 
         masto.status_post(msg, visibility = 'public')
         countdown -= 1
