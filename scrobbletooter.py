@@ -109,11 +109,12 @@ def set_lastfm_high_water_mark(config, last):
 
 def get_lastfm_high_water_mark(config):
     """Get the marker for the latest last.fm track processed."""
-    if (not config.has_section('lastfm')
-        or not config.has_option('lastfm', 'last_timestamp')):
-            return 1
+    if (not config.has_section('lastfm') or
+            not config.has_option('lastfm', 'last_timestamp')):
+        return 1
 
     return config.getint('lastfm', 'last_timestamp')
+
 
 def status_iter(m, limit=5, min_days=0, tags=[], include_favorites=True):
     me = m.account_verify_credentials()
@@ -122,7 +123,9 @@ def status_iter(m, limit=5, min_days=0, tags=[], include_favorites=True):
     tags = [t.lower() for t in tags]
 
     while limit > 0:
-        #print("Fetching block (max_id %d, remaining %d)" % (max_id or -1, limit))
+        if DEBUG:
+            print("Fetching block (max_id %d, remaining %d)"
+                  % (max_id or -1, limit))
         statuses = m.account_statuses(me, max_id=max_id, limit=40)
 
         if len(statuses) == 0:
@@ -135,10 +138,14 @@ def status_iter(m, limit=5, min_days=0, tags=[], include_favorites=True):
                 max_id = s.id
 
             td = datetime.datetime.now(tz=dateutil.tz.tzutc()) - s.created_at
-            #print("Considering: %d (%s) td=%s vs %s" % (s.id, s.created_at, td, min_td))
+            if DEBUG:
+                print("Considering: %d (%s) td=%s vs %s"
+                      % (s.id, s.created_at, td, min_td))
 
             candidate = td > min_td
-            candidate = candidate and (include_favorites or (s.favourites_count == 0 and s.reblogs_count == 0))
+            candidate = candidate and (include_favorites or (
+                                       s.favourites_count == 0 and
+                                       s.reblogs_count == 0))
 
             if candidate and len(tags) > 0:
                 tag_found = False
@@ -152,9 +159,12 @@ def status_iter(m, limit=5, min_days=0, tags=[], include_favorites=True):
             if limit <= 0:
                 break
 
+
 def cleanup_old(m, min_days=30, tags=[]):
-    for s in status_iter(m, min_days=min_days, tags=tags, include_favorites=True):
-        #print("Deleting status: %d" % s.id)
+    for s in status_iter(m, min_days=min_days, tags=tags,
+                         include_favorites=False):
+        if DEBUG:
+            print("Deleting status: %d" % s.id)
         m.status_delete(s)
 
 
@@ -174,14 +184,18 @@ def main():
     # iterate over tracks
     countdown = MAX_COUNT
 
-    for p in reversed(lfmu.get_recent_tracks(time_from=last_ts, cacheable=False)):
+    for p in reversed(lfmu.get_recent_tracks(time_from=last_ts,
+                                             cacheable=False)):
         p_ts = int(p.timestamp)
 
-        if DEBUG: print((p_ts, last_ts))
+        if DEBUG:
+            print((p_ts, last_ts))
+
         if p_ts <= last_ts:
             continue
 
-        if DEBUG: print(p)
+        if DEBUG:
+            print(p)
 
         last_ts = p_ts
         t = p.track
@@ -209,5 +223,5 @@ def main():
     set_lastfm_high_water_mark(cfg, last_ts)
 
 
-if __name__ == '__main__': main()
-
+if __name__ == '__main__':
+    main()
