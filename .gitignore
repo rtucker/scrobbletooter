@@ -2,6 +2,8 @@
 app_credentials.cfg
 config.cfg
 
+Pipfile.lock
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
