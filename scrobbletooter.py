@@ -3,9 +3,10 @@ import configparser
 import datetime
 import dateutil
 import getpass
+import time
 
 CONFIG_FILE = None
-MAX_COUNT = 1
+MAX_COUNT = 5
 DEBUG = False
 
 
@@ -113,7 +114,7 @@ def get_lastfm_high_water_mark(config):
 
     return config.getint('lastfm', 'last_timestamp')
 
-def status_iter(m, limit=20, min_days=0, tags=[], include_favorites=True):
+def status_iter(m, limit=5, min_days=0, tags=[], include_favorites=True):
     me = m.account_verify_credentials()
     max_id = None
     min_td = datetime.timedelta(days=min_days)
@@ -151,7 +152,7 @@ def status_iter(m, limit=20, min_days=0, tags=[], include_favorites=True):
                 break
 
 def cleanup_old(m, min_days=30, tags=[]):
-    for s in status_iter(m, min_days=min_days, tags=tags, include_favorites=False):
+    for s in status_iter(m, min_days=min_days, tags=tags, include_favorites=True):
         #print("Deleting status: %d" % s.id)
         m.status_delete(s)
 
@@ -200,6 +201,8 @@ def main():
         countdown -= 1
         if countdown <= 0:
             break
+
+        time.sleep(30)
 
     set_lastfm_high_water_mark(cfg, last_ts)
 
