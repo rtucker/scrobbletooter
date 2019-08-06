@@ -205,13 +205,13 @@ def main():
         t_artist_name = t_artist.get_name() if t_artist is not None else "?"
         t_track_name = t.get_title()
 
-        msg = "#NowPlaying<br/>"
+        msg = "Now Playing at the <em>Catgirl Fortress™️</em>:<br/>"
         msg += "<br/>"
         msg += "<b>%s</b> - <a href=\"%s\">%s</a><br/>" % (
-            html.escape(t_artist_name), html.escape(t_url),
-            html.escape(t_track_name))
+            html.escape(t_artist_name, quote=False), html.escape(t_url),
+            html.escape(t_track_name, quote=False))
         msg += "<br/>"
-        msg += "#bot #np #FediPlay #TimelineMute<br/>"
+        msg += "#bot #np #NowPlaying #FediPlay #TimelineMute<br/>"
 
         masto.status_post(msg, visibility='public', content_type='text/html')
         countdown -= 1
