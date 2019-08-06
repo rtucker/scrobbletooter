@@ -3,6 +3,7 @@ import configparser
 import datetime
 import dateutil
 import getpass
+import html
 import time
 
 CONFIG_FILE = None
@@ -190,14 +191,15 @@ def main():
         t_artist_name = t_artist.get_name() if t_artist is not None else "?"
         t_track_name = t.get_title()
 
-        msg = "#NowPlaying in the #CatgirlFortress\n"
-        msg += "\n"
-        msg += "%s - \"%s\"\n" % (t_artist_name, t_track_name)
-        msg += "\n"
-        msg += "Song info: %s\n" % (t_url)
-        msg += "#bot #np #fediplay #timelinemute"
+        msg = "#NowPlaying<br/>"
+        msg += "<br/>"
+        msg += "<b>%s</b> - <a href=\"%s\">%s</a><br/>" % (
+            html.escape(t_artist_name), html.escape(t_url),
+            html.escape(t_track_name))
+        msg += "<br/>"
+        msg += "#bot #np #FediPlay #TimelineMute<br/>"
 
-        masto.status_post(msg, visibility = 'public')
+        masto.status_post(msg, visibility='public', content_type='text/html')
         countdown -= 1
         if countdown <= 0:
             break
