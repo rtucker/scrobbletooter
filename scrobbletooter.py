@@ -4,10 +4,9 @@ import datetime
 import dateutil
 import getpass
 import html
-import time
 
 CONFIG_FILE = None
-MAX_COUNT = 5
+MAX_COUNT = 1
 DEBUG = False
 
 
@@ -217,8 +216,6 @@ def main():
         countdown -= 1
         if countdown <= 0:
             break
-
-        time.sleep(30)
 
     set_lastfm_high_water_mark(cfg, last_ts)
 
