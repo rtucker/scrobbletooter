@@ -6,7 +6,7 @@ import getpass
 import html
 
 CONFIG_FILE = None
-MAX_COUNT = 1
+MAX_COUNT = 5
 DEBUG = False
 
 
@@ -171,10 +171,6 @@ def main():
     creds = read_app_credentials()
     cfg = read_config_file('config.cfg')
 
-    masto = get_mastodon(creds, cfg)
-
-    cleanup_old(masto, min_days=14, tags=["nowplaying"])
-
     lastfm = get_lastfm(creds, cfg)
     lfmu = lastfm.get_user(cfg.get('lastfm', 'user'))
 
@@ -183,8 +179,13 @@ def main():
     # iterate over tracks
     countdown = MAX_COUNT
 
-    for p in reversed(lfmu.get_recent_tracks(time_from=last_ts,
-                                             cacheable=False)):
+    recents = lfmu.get_recent_tracks(time_from=last_ts, cacheable=False)
+
+    if recents:
+        masto = get_mastodon(creds, cfg)
+        cleanup_old(masto, min_days=14, tags=["nowplaying"])
+
+    for p in reversed(recents):
         p_ts = int(p.timestamp)
 
         if DEBUG:
@@ -204,7 +205,7 @@ def main():
         t_artist_name = t_artist.get_name() if t_artist is not None else "?"
         t_track_name = t.get_title()
 
-        msg = "Now Playing at the <em>Catgirl Fortress™️</em>:<br/>"
+        msg = "Now Playing in the <em>Catgirl Fortress</em>:<br/>"
         msg += "<br/>"
         msg += "<b>%s</b> - <a href=\"%s\">%s</a><br/>" % (
             html.escape(t_artist_name, quote=False), html.escape(t_url),
