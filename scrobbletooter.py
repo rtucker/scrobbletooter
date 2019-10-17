@@ -179,7 +179,7 @@ def main():
     # iterate over tracks
     countdown = MAX_COUNT
 
-    recents = lfmu.get_recent_tracks(time_from=last_ts, cacheable=False)
+    recents = lfmu.get_recent_tracks(time_from=last_ts+1, cacheable=False)
 
     if recents:
         masto = get_mastodon(creds, cfg)
